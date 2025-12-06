@@ -7,6 +7,7 @@ let romanizations;
 let currentAttempt;
 let lastSubmittedValue = '';
 let csvEntries = [];
+let submitted = false;
 const settings = {
   difficulty: 'normal',
   theme: localStorage.getItem('theme') || 'auto'
@@ -79,6 +80,9 @@ function play() {
 
   korean = result.korean;
   definition = result.definition;
+  submitted = false;
+
+  document.getElementById('word-input').focus();
 }
 
 /**
@@ -251,6 +255,7 @@ function checkAnswer(input) {
 
     // Re-render the streak
     renderStreaks();
+    submitted = true;
 
     return true;
   } else {
@@ -843,4 +848,11 @@ updateAttemptDisplay(currentAttempt);
 document.getElementById('openHintFromHelp').addEventListener('click', function (e) {
   e.preventDefault();
   switchModal('welcomeModal', 'hintModal');
+});
+
+// Checks for enter stroke
+document.addEventListener('keydown', function (event) {
+  if (event.key === 'Enter' && submitted === true) {
+    play()
+  }
 });
